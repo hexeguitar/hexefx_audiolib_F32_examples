@@ -12,3 +12,5 @@ Example PlatformIO project using the Plate Reverb component from the `hexefx_aud
 ![Choose MIDI interface](../img/WebMIDI_open.png)  
 ![Open the Serial Port](../img/WebSerial_open.png)  
 ![Control interface](../img/PlateReverbCtrl.png)  
+## Demo  
+[![HexeFX Plate Reverb Stereo](http://img.youtube.com/vi/kalTw_w2d0I/0.jpg)](http://www.youtube.com/watch?v=kalTw_w2d0I)
