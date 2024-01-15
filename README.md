@@ -11,7 +11,8 @@ Example projects for the [hexefx_audiolib_F32](https://github.com/hexeguitar/hex
 4. Clone the required libraries:  
    - `git clone https://github.com/nottwo/BasicTerm.git`  
    - `git clone https://github.com/chipaudette/OpenAudio_ArduinoLibrary.git` 
-   - `git clone https://github.com/hexeguitar/hexefx_audiolib_F32.git` 
+   - `git clone https://github.com/hexeguitar/hexefx_audiolib_F32.git`  
+  ![Arduino Sketchbook paths](img/arduino_paths.gif)
 5. Restart Arduino IDE  
 6. Open an `name_ArduinoIDE` example in the IDE.  
 7. In Arduino IDE set the board to Teensy4.x  
