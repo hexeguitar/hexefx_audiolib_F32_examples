@@ -6,7 +6,7 @@ Example projects for the [hexefx_audiolib_F32](https://github.com/hexeguitar/hex
 
 ## Using within Arduino IDE  
 1. Locate the Arduino Sketchbook directory (path shown in Preferences)  
-2. Enter the Sketchbook directory (ie. `/home/user/Arduino/)  
+2. Enter the Sketchbook directory (ie. `/home/user/Arduino/`)  
 3. Create a new directory `libraries`  and enter it using a terminal or github CLI.
 4. Clone the required libraries:  
    - `git clone https://github.com/nottwo/BasicTerm.git`  
