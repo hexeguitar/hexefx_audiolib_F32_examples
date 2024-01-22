@@ -49,6 +49,9 @@ a {
     width: 50%;
 }
 
+.height250px {
+	height: 250px;
+}
 
 .control-block {
     /*border: 1px solid rgb(80, 80, 80);*/
