@@ -2,7 +2,8 @@
 Example projects for the [hexefx_audiolib_F32](https://github.com/hexeguitar/hexefx_audiolib_F32):  
 ### [Plate Reverb Stereo](https://github.com/hexeguitar/hexefx_audiolib_F32_examples/tree/main/PlateReverbStereo "Plate Reverb Stereo")  
 [![HexeFX Plate Reverb Stereo](http://img.youtube.com/vi/kalTw_w2d0I/0.jpg)](http://www.youtube.com/watch?v=kalTw_w2d0I)  
-
+### [Stereo IR Cabsim](https://github.com/hexeguitar/hexefx_audiolib_F32_examples/tree/main/StereoIRcabsim "Stereo IR Cabsim")  
+[![HexeFX Stereo IR Cabsim](http://img.youtube.com/vi/VG3BTwthkws/0.jpg)](http://www.youtube.com/watch?v=VG3BTwthkws)  
 
 ## Using within Arduino IDE  
 1. Locate the Arduino Sketchbook directory (path shown in Preferences)  
