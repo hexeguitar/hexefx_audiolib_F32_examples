@@ -1,5 +1,5 @@
 /**
- * @file main.cpp
+ * @file StereoIRcabsim_ArduinoIDE.ino
  * @author Piotr Zapart
  * @brief Example project for the Stereo IR cabsim component
  * 		required libraries: 
@@ -18,19 +18,9 @@
 #include "OpenAudio_ArduinoLibrary.h"
 #include "hexefx_audio_F32.h"
 #include "BasicTerm.h"
-#include "stats.h"
 
-// uncomment the line below to make examlpe work with TeensyAudioAdapter board (SGTL5000)
-#define USE_TEENSY_AUDIO_BOARD
+#define DBG_SERIAL Serial
 
-// analog bypass controls
-#define DRY_CTRL_PIN    28
-#define WET_CTRL_PIN    29
-#define CTRL_HI     	LOW
-#define CTRL_LO     	HIGH
-
-// Teensy audio adaptor is using I2S1 and SGTL5000 codec chip
-#ifdef USE_TEENSY_AUDIO_BOARD
 AudioControlSGTL5000			codec;
 AudioInputI2S_F32				i2s_in;
 AudioFilterToneStackStereo_F32	eq;
@@ -40,18 +30,7 @@ AudioFilterIRCabsim_F32			cabsim;
 AudioFilterEqualizer_HX_F32		eqL;
 AudioFilterEqualizer_HX_F32		eqR;
 AudioOutputI2S_F32     			i2s_out;
-#else
-// HW configuration for the HexeFX T41.GFX pedal (I2S2 + WM8731 coded)
-AudioControlWM8731              codec;
-AudioInputI2S2_F32				i2s_in;
-AudioFilterToneStackStereo_F32	eq;
-AudioFilterEqualizer_HX_F32		eqPreL;
-AudioFilterEqualizer_HX_F32		eqPreR;
-AudioFilterIRCabsim_F32			cabsim;
-AudioFilterEqualizer_HX_F32		eqL;
-AudioFilterEqualizer_HX_F32		eqR;
-AudioOutputI2S2_F32     		i2s_out;
-#endif
+
 
 AudioConnection_F32     cable1(i2s_in, 0, eq, 0);
 AudioConnection_F32     cable2(i2s_in, 1, eq, 1);
@@ -100,30 +79,19 @@ void setup()
 	DBG_SERIAL.begin(115200);
 	DBG_SERIAL.println("T41GFX - Stereo IR Cabsim");
 	DBG_SERIAL.println("01.2024 www.hexefx.com");
-#ifndef USE_TEENSY_AUDIO_BOARD	
-	// analog IO setup - depends on used hardware
-	pinMode(DRY_CTRL_PIN, OUTPUT);
-	pinMode(WET_CTRL_PIN, OUTPUT);
-	digitalWriteFast(DRY_CTRL_PIN, CTRL_LO); 	// mute analog dry passthrough
-	digitalWriteFast(WET_CTRL_PIN, CTRL_HI);	// turn on wet signal
-#endif	
+
 	AudioMemory_F32(20);
 	eqPreL.equalizerNew(10, (float *)&fBandPre[0], (float *)&dbBandPreL[0], 30, &equalizeCoeffs[0], 60.0f);
 	eqPreR.equalizerNew(10, (float *)&fBandPre[0], (float *)&dbBandPreR[0], 30, &equalizeCoeffs[0], 60.0f);
 	eqL.equalizerNew(6, (float *)&fBandPost[0], (float *)&dbBandPostL[0], 30, &equalizeCoeffs[0], 60.0f);
 	eqR.equalizerNew(6, (float *)&fBandPost[0], (float *)&dbBandPostR[0], 30, &equalizeCoeffs[0], 60.0f);
 
-#ifdef USE_TEENSY_AUDIO_BOARD
 	if (!codec.enable()) DBG_SERIAL.println("Codec init error!");
 	codec.inputSelect(AUDIO_INPUT_LINEIN);
 	codec.volume(0.8f);
 	codec.lineInLevel(10, 10);
 	codec.adcHighPassFilterDisable();
-#else
-    if (!codec.enable()) DBG_SERIAL.println("Codec init error!");
-    codec.inputSelect(AUDIO_INPUT_LINEIN);
-    codec.inputLevel(0.77f);
-#endif
+
 	DBG_SERIAL.println("Codec initialized.");
 	// set callbacks for USB MIDI
     usbMIDI.setHandleNoteOn(cb_NoteOn);
@@ -164,10 +132,8 @@ void cb_NoteOn(byte channel, byte note, byte velocity)
     switch(note)
     {
         case 1:
-			digitalToggleFast(DRY_CTRL_PIN);
             break;
         case 2:
-			digitalToggleFast(WET_CTRL_PIN);
             break;
 		case 6 ... 16:
 			IRno = note - 6;
