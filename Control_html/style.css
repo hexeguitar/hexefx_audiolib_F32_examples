@@ -5,6 +5,7 @@
     --b-radius: min(1.9vmin, 15px); /* border radius */
     --b-width: 0.3rem; /* border thickness */
     --spacing: 0.3rem; /* widget spacing */
+	--font: 'Rubik', sans-serif !important; 
   }
 
   html,
@@ -15,7 +16,7 @@
     overflow-y: hidden;
     color: white;
     background-color: var(--bg);
-	font-family: 'Rubik', sans-serif !important; 
+	font-family: var(--font); 
     touch-action: none;
   }
 a {
@@ -30,12 +31,14 @@ a {
 
 .header h2 {
     font-weight: bold;
-    font-size: 40px;
+    font-size: 30px;
 }
 
 .header p {
     font-size: 20px;
+
 }
+
 
 .controls {
     background-color: black;
@@ -55,6 +58,7 @@ a {
 
 .control-block {
     /*border: 1px solid rgb(80, 80, 80);*/
+	
 	border: none;
     border-radius: 20px;
     padding: 20px;
@@ -64,9 +68,7 @@ a {
 
 .btn {
     margin: auto;
-    width: 100%;
-    /* height: 50px;*/
-    
+    width: 100%;  
 }
 
 .terminal-settings {
@@ -85,7 +87,8 @@ a {
     font-size: 40px;
 }
 p {
-    text-align: center;
+	display: flex;
+	align-items: center;
     font-size: 20px;
 }
 

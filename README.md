@@ -1,9 +1,21 @@
 # hexefx_audiolib_F32_examples
 Example projects for the [hexefx_audiolib_F32](https://github.com/hexeguitar/hexefx_audiolib_F32):  
 ### [Plate Reverb Stereo](https://github.com/hexeguitar/hexefx_audiolib_F32_examples/tree/main/PlateReverbStereo "Plate Reverb Stereo")  
-[![HexeFX Plate Reverb Stereo](http://img.youtube.com/vi/kalTw_w2d0I/0.jpg)](http://www.youtube.com/watch?v=kalTw_w2d0I)  
+[![Plate Reverb Stereo](http://img.youtube.com/vi/kalTw_w2d0I/0.jpg)](http://www.youtube.com/watch?v=kalTw_w2d0I) 
+
+### [Stereo ReverbSC](https://github.com/hexeguitar/hexefx_audiolib_F32_examples/tree/main/StereoReverbSc "Stereo ReverbSC") 
+[![HexeFX ReverbSC for Teensy4](http://img.youtube.com/vi/rLYGGqewINw/0.jpg)](https://www.youtube.com/watch?v=rLYGGqewINw)  
+ 
+### [Stereo Spring Reverb](https://github.com/hexeguitar/hexefx_audiolib_F32_examples/tree/main/SpringReverb "Stereo Spring Reverb") 
+[![HexeFX Stereo Spring Reverb](http://img.youtube.com/vi/y40e_oZgkyY/0.jpg)](https://www.youtube.com/watch?v=y40e_oZgkyY)  
+
+
 ### [Stereo IR Cabsim](https://github.com/hexeguitar/hexefx_audiolib_F32_examples/tree/main/StereoIRcabsim "Stereo IR Cabsim")  
 [![HexeFX Stereo IR Cabsim](http://img.youtube.com/vi/VG3BTwthkws/0.jpg)](http://www.youtube.com/watch?v=VG3BTwthkws)  
+
+### [Neural Amp Modeler](https://github.com/hexeguitar/hexefx_audiolib_F32_examples/tree/main/NeuralAmpModeler "NeuralAmpModeler")  
+[![HexeFX Guitar Amp Modeler](http://img.youtube.com/vi/o7K1zNQYCls/0.jpg)](http://www.youtube.com/watch?v=o7K1zNQYCls)  
+
 
 ## Using within Arduino IDE  
 1. Locate the Arduino Sketchbook directory (path shown in Preferences)  

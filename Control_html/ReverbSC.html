@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teensy4.x HexeFX Audio Library - Stereo Reverb SC</title>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rubik">
+    <link rel="stylesheet" href="style.css">
+    <script src="bundle.js"></script>
+    <script src="term.js"></script>
+</head>
+<body>
+    <div class="terminal-settings">
+        Serial port speed:
+        <select name="speed" id="SerialSpeed">
+            <option value="115200">115200</option>
+            <option value="1200">1200</option>
+            <option value="2400">2400</option>
+            <option value="4800">4800</option>
+            <option value="9600">9600</option>
+            <option value="19200">19200</option>
+            <option value="38400">38400</option>
+            <option value="57600">57600</option>
+            <option value="115200">115200</option>
+        </select>
+        <button id="SerialConnectButton" type="button" disabled>Connect</button>
+        Powered by <a href="https://github.com/benc-uk/touchmidi" target="_blank">TouchMIDI</a> and <a href="https://github.com/rafaelaroca/web-serial-terminal"target="_blank">web-serial-terminal</a>.
+       <!-- 
+        MIDI channel:
+        <select name="midich" id="MidiChannel">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3/option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+        </select>-->
+    </div>
+    <div class="header">
+        <h2>Teensy4.x HexeFX Audio Library - Stereo Reverb SC</h2>
+        <h3>(c)01.2024 <a href="https://www.hexefx.com" target="_blank">www.hexefx.com</a></h3>
+    </div>
+   
+<div class="controls">
+			<group-row margin="0.6">
+				<midi-button note="1" colour="#B3E5FC" label="Bypass" label-scale="0.5"></midi-button>
+                <midi-encoder label="Size\n%p" chan="1" cc="80" colour="#B3E5FC" label-scale="0.5"></midi-encoder>
+                <midi-encoder label="Lowpass\nFreq\n%p" chan="1" cc="81" colour="#B3E5FC" label-scale="0.5"></midi-encoder>
+                <midi-encoder label="Mix\n%p" chan="1" cc="82" colour="#B3E5FC" label-scale="0.5"></midi-encoder>
+				<midi-button note="2" colour="#C8E6C9" label="Freeze" label-scale="0.5"></midi-button>
+            </group-row>			
+</div>
+        <div class="term-wrapper"><div id="term"></div></div>
+    <div class="footer"></div>
+</body>
+
+<script>
+    var term;
+    function calculate_size(win) {
+        var cols = Math.max(80, Math.min(150, (win.innerWidth - 280) / 7)) | 0;
+        var rows = Math.max(8, Math.min(80, (win.innerHeight - 180) / 12)) | 0;
+        return [cols, rows];
+    }
+    (function () {
+        window.onload = function () {
+
+            var size = calculate_size(self);
+            term = new Terminal({
+                cols: 80,
+                rows: 8,
+                useStyle: false,
+                screenKeys: true,
+                cursorBlink: false
+            });
+            term.innerText
+            term.open(document.getElementById("term"));
+        };
+        window.addEventListener('resize', function () {
+            var size = calculate_size(self);
+            term.resize(size[0], size[1]);
+        });
+    }).call(this);
+    /*
+     * Web Serial API (Google Chrome)
+     *
+     * Useful information used to this implementation:
+     * https://github.com/svendahlstrand/web-serial-api/
+     * https://dev.to/unjavascripter/the-amazing-powers-of-the-web-web-serial-api-3ilc
+     *
+     */
+    const connectButton = document.getElementById('SerialConnectButton');
+    let port;
+
+    if ('serial' in navigator) {
+        connectButton.addEventListener('click', function () {
+            if (port) {
+                term.write('\x1b[31mDisconnected from Serial Port\x1b[m\r\n');
+                port.close();
+                port = undefined;
+                connectButton.innerText = 'Connect';
+                document.getElementById('SerialSpeed').disabled = false;
+            }
+            else {
+                connectButton.innerText = 'Disconnect';
+                getReader();
+            }
+        });
+        connectButton.disabled = false;
+    }
+    else {
+        const error = document.createElement('p');
+        error.innerHTML = '<p>Support for Serial Web API not enabled. Please enable it using chrome://flags/ and enable Experimental Web Platform fetures</p>';
+    }
+    let lineBuffer = '';
+    let latestValue = 0;
+    async function serialWrite(data) {
+        encoder = new TextEncoder();
+        const dataArrayBuffer = encoder.encode(data);
+
+        if (port && port.writable) {
+            const writer = port.writable.getWriter();
+            writer.write(dataArrayBuffer);
+            writer.releaseLock();
+        }
+    }
+    async function getReader() {
+        port = await navigator.serial.requestPort({});
+        var e = document.getElementById("SerialSpeed");
+        var strSpd = e.options[e.selectedIndex].value;
+
+        var speed = parseInt(strSpd);
+        await port.open({ baudRate: [speed] });
+        document.getElementById('SerialSpeed').disabled = true;
+        connectButton.innerText = 'Disconnect';
+        const appendStream = new WritableStream({
+            write(chunk) {
+                term.write(chunk);
+            }
+        });
+        port.readable
+            .pipeThrough(new TextDecoderStream())
+            .pipeTo(appendStream);
+        term.on('data', function (data) {
+            serialWrite(data);
+        });
+    }
+</script>
+
+</html>

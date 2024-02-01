@@ -1,7 +1,7 @@
 /**
  * @file main.cpp
  * @author Piotr Zapart
- * @brief Example project for the Stereo IR cabsim component
+ * @brief Example project for the Stereo Plate Reverb component
  * 		required libraries: 
  * 			OpenAudio_ArduinoLibrary: https://github.com/chipaudette/OpenAudio_ArduinoLibrary
  * 			HexeFX_audiolib_F32: https://github.com/hexeguitar/hexefx_audiolib_F32
@@ -21,7 +21,11 @@
 #include "stats.h"
 
 // uncomment the line below to make examlpe work with TeensyAudioAdapter board (SGTL5000)
-#define USE_TEENSY_AUDIO_BOARD
+//#define USE_TEENSY_AUDIO_BOARD
+
+#ifndef DBG_SERIAL 
+	#define DBG_SERIAL Serial
+#endif
 
 // analog bypass controls
 #define DRY_CTRL_PIN    28
@@ -34,51 +38,23 @@
 AudioControlSGTL5000			codec;
 AudioInputI2S_F32				i2s_in;
 AudioFilterToneStackStereo_F32	eq;
-AudioFilterEqualizer_HX_F32		eqPreL;
-AudioFilterEqualizer_HX_F32		eqPreR;
 AudioFilterIRCabsim_F32			cabsim;
-AudioFilterEqualizer_HX_F32		eqL;
-AudioFilterEqualizer_HX_F32		eqR;
 AudioOutputI2S_F32     			i2s_out;
 #else
 // HW configuration for the HexeFX T41.GFX pedal (I2S2 + WM8731 coded)
 AudioControlWM8731              codec;
 AudioInputI2S2_F32				i2s_in;
 AudioFilterToneStackStereo_F32	eq;
-AudioFilterEqualizer_HX_F32		eqPreL;
-AudioFilterEqualizer_HX_F32		eqPreR;
 AudioFilterIRCabsim_F32			cabsim;
-AudioFilterEqualizer_HX_F32		eqL;
-AudioFilterEqualizer_HX_F32		eqR;
 AudioOutputI2S2_F32     		i2s_out;
 #endif
 
 AudioConnection_F32     cable1(i2s_in, 0, eq, 0);
 AudioConnection_F32     cable2(i2s_in, 1, eq, 1);
-
-AudioConnection_F32		cable3(eq, 0, eqPreL, 0);
-AudioConnection_F32		cable4(eq, 1, eqPreR, 0);
-
-AudioConnection_F32 	cable10(eqPreL, 0, cabsim, 0);
-AudioConnection_F32 	cable11(eqPreR, 0, cabsim, 1);
-AudioConnection_F32     cable30(cabsim, 0, eqL, 0);	// post EQ
-AudioConnection_F32     cable31(cabsim, 1, eqR, 0);
-
-AudioConnection_F32		cable40(eqL, 0, i2s_out, 0);
-AudioConnection_F32		cable41(eqR, 0, i2s_out, 1);
-
-/**
- * @brief eqR is a 10 band equalizer used on channelR if Doubler (stereo) mode is enabled in the IR cabsim
- * 			it helps to restore the LR balance if one channel is delayed. Also decorelates channel R which 
- * 			helps with createing a wider and more natual stereo signal.
- */
-const float32_t fBandPre[] = {	40.0f, 	80.0f, 	160.0f, 	320.0f, 	640.0f, 	1280.0f, 	2560.0f, 	5120.0f, 	10240.0f, 	22050.0f};
-const float32_t dbBandPreR[] = {	0.0f,  	2.0f, 	-2.0f,  	-3.0f, 		-1.0f,  	2.0f,   	3.0f,   	4.0f,    	0.0f,    	-100.0f};
-const float32_t dbBandPreL[] = {	0.0f,  	-2.0f, 	1.0f,  		 0.0f, 		-2.0f,  	-1.0f,   	-1.4f,   	0.0f,    	0.0f,    	-100.0f};
-float32_t equalizeCoeffs[200];
-const float32_t fBandPost[] = {	40.0f, 	100.0f, 	250.0f, 	5000.0f,  	7600.0f, 	22050.0f};
-const float32_t dbBandPostR[]= {	0.0f, 	3.6f, 		0.0f, 		0.0f, 		2.5f, 		-100.0f}; 
-const float32_t dbBandPostL[]= {	0.0f, 	1.6f, 		0.0f, 		0.0f, 		-1.5f, 		-100.0f}; 
+AudioConnection_F32		cable10(eq, 0, cabsim, 0);
+AudioConnection_F32		cable11(eq, 1, cabsim, 1);
+AudioConnection_F32		cable21(cabsim, 0, i2s_out, 0);
+AudioConnection_F32		cable22(cabsim, 1, i2s_out, 1);
 
 BasicTerm term(&DBG_SERIAL); // terminal is used to print out the status and info via WebSerial
 
@@ -86,9 +62,9 @@ BasicTerm term(&DBG_SERIAL); // terminal is used to print out the status and inf
 void cb_NoteOn(byte channel, byte note, byte velocity);
 void cb_ControlChange(byte channel, byte control, byte value);
 
-bool doublerState = true;
+bool doublerState = false;
 uint8_t IRno = 6;
-bool eq_bypass = false;
+uint8_t eqModelNo = 0;
 const char *eqPresetName;
 uint32_t timeNow, timeLast;
 const char msg_OFF[] = "OFF";
@@ -98,7 +74,7 @@ void printMemInfo(void);
 void setup()
 {
 	DBG_SERIAL.begin(115200);
-	DBG_SERIAL.println("T41GFX - Stereo IR Cabsim");
+	DBG_SERIAL.println("T41GFX - Stereo Plate Reverb");
 	DBG_SERIAL.println("01.2024 www.hexefx.com");
 #ifndef USE_TEENSY_AUDIO_BOARD	
 	// analog IO setup - depends on used hardware
@@ -108,11 +84,6 @@ void setup()
 	digitalWriteFast(WET_CTRL_PIN, CTRL_HI);	// turn on wet signal
 #endif	
 	AudioMemory_F32(20);
-	eqPreL.equalizerNew(10, (float *)&fBandPre[0], (float *)&dbBandPreL[0], 30, &equalizeCoeffs[0], 60.0f);
-	eqPreR.equalizerNew(10, (float *)&fBandPre[0], (float *)&dbBandPreR[0], 30, &equalizeCoeffs[0], 60.0f);
-	eqL.equalizerNew(6, (float *)&fBandPost[0], (float *)&dbBandPostL[0], 30, &equalizeCoeffs[0], 60.0f);
-	eqR.equalizerNew(6, (float *)&fBandPost[0], (float *)&dbBandPostR[0], 30, &equalizeCoeffs[0], 60.0f);
-
 #ifdef USE_TEENSY_AUDIO_BOARD
 	if (!codec.enable()) DBG_SERIAL.println("Codec init error!");
 	codec.inputSelect(AUDIO_INPUT_LINEIN);
@@ -130,6 +101,7 @@ void setup()
     usbMIDI.setHandleControlChange(cb_ControlChange);
 	// default sound settings:
 	cabsim.ir_load(IRno);
+	eqModelNo = TONESTACK_MESA;
 	eq.setModel(TONESTACK_MESA);
 	eq.setTone(0.2f, 0.7f, 0.75f);
 	eq.setGain(0.8f * 4.0f);
@@ -177,26 +149,16 @@ void cb_NoteOn(byte channel, byte note, byte velocity)
             SCB_AIRCR = 0x05FA0004; // MCU reset
             break;
 		case 18 ... 27:
-			eq.setModel((toneStack_presets_e)(note-18));
+			eqModelNo = note - 18;
+			eq.setModel((toneStack_presets_e)(eqModelNo));
 			eqPresetName = eq.getName();
 			break;
 		case 28:
-			eq.setModel((toneStack_presets_e)(note-18));
-			eqPresetName = msg_OFF;
 			break;
 		case 30:
 			doublerState = cabsim.doubler_tgl();
-			eq_bypass = !doublerState;
-			eqPreR.bypass_set(eq_bypass);
-			eqPreL.bypass_set(eq_bypass);
-			eqL.bypass_set(eq_bypass);
-			eqR.bypass_set(eq_bypass);
 			break;
 		case 31:	
-			eq_bypass = eqPreR.bypass_tgl();
-			eqPreL.bypass_set(eq_bypass);
-			eqL.bypass_set(eq_bypass);
-			eqR.bypass_set(eq_bypass);			
 			break;
         default:
             break;
@@ -238,22 +200,24 @@ void printMemInfo(void)
     AudioProcessorUsageMaxReset();
 	char bf[20] = "";
 	
+	float32_t irlen = cabsim.ir_get_len_ms();
+
 	switch(IRno)
 	{
 		case 0 ... 6:
-			snprintf(bf, 20, "Guitar %d    \r\n", IRno+1);
+			snprintf(bf, 40, "Guitar %d %2.2fms    \r\n", IRno+1, irlen);
 			break;
 		case 7 ... 9:
-			snprintf(bf, 20, "Bass %d    \r\n", IRno-6);
+			snprintf(bf, 40, "Bass %d %2.2fms   \r\n", IRno-6, irlen);
 			break;
 		case 10:
-			snprintf(bf, 20, "OFF        \r\n");
+			snprintf(bf, 40, "OFF               \r\n");
 			break;
 		default: break;
 	}
     DBG_SERIAL.printf("CPU usage: cabsim=%2.2f%% eq=%2.2F%%  max = %2.2f%%   \r\n",
 						 load_rv, load_eq, load);
-	DBG_SERIAL.printf("EQ model: %s      \r\n", eqPresetName);
+	DBG_SERIAL.printf("EQ model: %d %s      \r\n",eqModelNo, eqPresetName);
 	DBG_SERIAL.printf("Doubler %s\r\n", doublerState ? on : off);	
 	DBG_SERIAL.print("IR: ");
 	DBG_SERIAL.print(bf);
