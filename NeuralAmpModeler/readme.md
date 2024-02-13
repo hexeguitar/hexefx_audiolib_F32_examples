@@ -2,7 +2,7 @@
 
 This project combines various components from the `hexefx_audioLibrary_F32` with the RTNeural library to create a full guitar amp emulation on Teensy4.1. **Requires installed PSRAM!**  
 Internal signal flow:  
-![Choose MIDI interface](/img/AmpModeler.gif)
+![Internal signal flow](img/AmpModeler.gif)
 
 ## Features  
 - 8 amp/fx models + bypass  
