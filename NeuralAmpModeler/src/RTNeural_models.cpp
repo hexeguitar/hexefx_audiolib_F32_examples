@@ -287,5 +287,5 @@ bias_fl : True
   Model8.levelAdjust = 0.20;
 
   // ADD YOUR MODEL IDENTIFIER HERE ////////////////////////////////// < -------------------------
-  model_collection = {  Model1, Model2, Model3, Model4, Model5, Model6, Model7, Model8 };
+  model_collection = {  Model1, Model5, Model2, Model6, Model3, Model7, Model4, Model8 };
 }

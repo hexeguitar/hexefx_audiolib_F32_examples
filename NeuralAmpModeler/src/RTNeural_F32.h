@@ -41,7 +41,7 @@ public:
 		inputGain = g;
 		__enable_irq();
 	}
-
+	uint8_t getModel() {return modelIndex + 1;}
 private:
 	audio_block_f32_t *inputQueueArray_f32[2];
 	RTNeural::ModelT<float, 1, 1,

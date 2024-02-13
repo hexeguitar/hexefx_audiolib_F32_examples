@@ -49,7 +49,7 @@
 	</div>
 	<div class="header">
 		<h2>Teensy4.x HexeFX Audio Library - Guitar Amp Emulation</h2>
-		<h3>(c)01.2024 <a href="https://www.hexefx.com" target="_blank">www.hexefx.com</a></h3>
+		<h3>(c)02.2024 <a href="https://www.hexefx.com" target="_blank">www.hexefx.com</a></h3>
 	</div>
 
 	<div class="controls">
@@ -57,16 +57,17 @@
 			<p>Amp Model</p>
 			<midi-button note="40" colour="#6092e0" label="OFF" label-scale="0.5"></midi-button> <!-- Bypass -->
 			<midi-button note="41" colour="#6092e0" label="Clean1" label-scale="0.5"></midi-button> <!-- Fender -->
-			<midi-button note="45" colour="#6092e0" label="Clean2" label-scale="0.5"></midi-button>	<!-- HKcln -->
-			<midi-button note="42" colour="#6092e0" label="Clean3" label-scale="0.5"></midi-button>	<!-- Matchless -->
-			<midi-button note="46" colour="#6092e0" label="Clean4" label-scale="0.5"></midi-button> <!-- Bassman -->
-			<midi-button note="43" colour="#6092e0" label="Crunch1" label-scale="0.5"></midi-button>	<!-- Klon -->
-			<midi-button note="47" colour="#6092e0" label="Crunch2" label-scale="0.5"></midi-button>	<!-- 5150 -->
-			<midi-button note="44" colour="#6092e0" label="Lead1" label-scale="0.5"></midi-button> <!-- MesaIIC -->
+			<midi-button note="42" colour="#6092e0" label="Clean2" label-scale="0.5"></midi-button>	<!-- HKcln -->
+			<midi-button note="43" colour="#6092e0" label="Clean3" label-scale="0.5"></midi-button>	<!-- Matchless -->
+			<midi-button note="44" colour="#6092e0" label="Clean4" label-scale="0.5"></midi-button> <!-- Bassman -->
+			<midi-button note="45" colour="#6092e0" label="Crunch1" label-scale="0.5"></midi-button>	<!-- Klon -->
+			<midi-button note="46" colour="#6092e0" label="Crunch2" label-scale="0.5"></midi-button>	<!-- 5150 -->
+			<midi-button note="47" colour="#6092e0" label="Lead1" label-scale="0.5"></midi-button> <!-- MesaIIC -->
 			<midi-button note="48" colour="#6092e0" label="Lead2" label-scale="0.5"></midi-button> <!-- Lead -->
 		</group-row>
 		<group-column>
 			<group-row>
+				<midi-button note="30" colour="#6092e0" label="Doubler" label-scale="0.8"></midi-button>
 				<midi-encoder label="Gate\n%p" chan="1" cc="80" colour="#B3E5FC" label-scale="0.8"></midi-encoder>
 				<midi-encoder label="Gain\n%p" chan="1" cc="85" colour="#B3E5FC" label-scale="0.8"></midi-encoder>
 				<midi-encoder label="Bass\n%p" chan="1" cc="81" colour="#B3E5FC" label-scale="0.8"></midi-encoder>
@@ -77,7 +78,21 @@
 				<midi-encoder label="Reverb\nTime\n%p" chan="1" cc="87" colour="#B3E5FC" label-scale="0.8"></midi-encoder>
 				<midi-encoder label="Reverb\nLoCut\n%p" chan="1" cc="88" colour="#B3E5FC" label-scale="0.8"></midi-encoder>
 				<midi-encoder label="Reverb\nHiCut\n%p" chan="1" cc="89" colour="#B3E5FC" label-scale="0.8"></midi-encoder>
-				<midi-button note="30" colour="#6092e0" label="Doubler" label-scale="0.8"></midi-button>
+				<midi-button note="37" colour="#B3E5FC" label="Reverb" label-scale="0.8"></midi-button>
+			</group-row>
+			<group-row>
+				<midi-button note="19" colour="#B3E5FC" label="Tap" label-scale="0.8"></midi-button>
+				<midi-encoder label="Time\n%p" chan="1" cc="1" colour="#B3E5FC" label-scale="0.8"></midi-encoder>
+				<midi-encoder label="Inertia\n%p" chan="1" cc="2" colour="#B3E5FC" label-scale="0.8"></midi-encoder>
+				<midi-encoder label="Repeats\n%p" chan="1" cc="3" colour="#B3E5FC" label-scale="0.8"></midi-encoder>	
+				<midi-encoder label="Mix\n%p" chan="1" cc="4" colour="#B3E5FC" label-scale="0.8"></midi-encoder>
+				<midi-encoder label="Mod\nRate\n%p" chan="1" cc="5" colour="#d082d9" label-scale="0.8"></midi-encoder>
+				<midi-encoder label="Mod\nDepth\n%p" chan="1" cc="6" colour="#d082d9" label-scale="0.8"></midi-encoder>
+				<midi-encoder label="HiCut\n%p" chan="1" cc="7" colour="#bad9b2" label-scale="0.8"></midi-encoder>
+				<midi-encoder label="LowCut\n%p" chan="1" cc="8" colour="#bad9b2" label-scale="0.8"></midi-encoder>
+				<midi-encoder label="Treble\n%p" chan="1" cc="9" colour="#bad9b2" label-scale="0.8"></midi-encoder>
+				<midi-encoder label="Bass\n%p" chan="1" cc="10" colour="#bad9b2" label-scale="0.8"></midi-encoder>
+				<midi-button note="18" colour="#B3E5FC" label="Delay" label-scale="0.8"></midi-button>
 			</group-row>
 		</group-column>
 		<group-row>

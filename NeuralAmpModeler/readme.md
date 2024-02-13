@@ -1,18 +1,21 @@
 ## HexeFX Guitar Amplifier Modeler for Teensy4.x  
 
-This project combines various components from the `hexefx_audioLibrary_F32` with the RTNeural library to create a full guitar amp emulation on Teensy4.1.  
+This project combines various components from the `hexefx_audioLibrary_F32` with the RTNeural library to create a full guitar amp emulation on Teensy4.1. **Requires installed PSRAM!**  
 Internal signal flow:  
 ![Choose MIDI interface](/img/AmpModeler.gif)
 
 ## Features  
-- 8 amp/fx models + bypass
-- Noise gate
-- Stereo Spring Reverb emualtion
-- 7 guitar cabinet IRs
-- 3 bass guitar IRs
+- 8 amp/fx models + bypass  
+- Noise gate  
+- Stereo Spring Reverb emualtion  
+- 7 guitar cabinet IRs  
+- 3 bass guitar IRs  
 - Doubler function to create a wider stereo image out of a single guitar track  
-- 3 band EQ
-- MIDI/WebMIDI used as control interface
+- 3 band EQ  
+- Stereo Ping-Pong delay with modulation
+- Spring reverb emulation
+- MIDI/WebMIDI used as control interface  
+- Reaper JS plugin to control the pedal directly from DAW (and sync delay to MIDI clock)
 
 ## Usage  
 1. Open the project in the PlatformIO environment.
@@ -26,16 +29,29 @@ Internal signal flow:
 ![Choose MIDI interface](../img/WebMIDI_open.png)  
 ![Open the Serial Port](../img/WebSerial_open.png)  
 ![Control interface](img/controls.gif)  
-
+![JS Reaper plugin](img/JS_pluginReaper.gif)  
 ## Controls  
 - Amp Model buttons
 - Gate - Noise gate threshold
 - Gain, Bass, Mid, Treble - amp controls
 - Vol - master volume
+- Reverb (button) on/off
 - Reverb Mix - dry/wet reverb mixer (allows to set 100% reverb sound)
 - Reverb Time - decay time
 - Reverb LoCut - input high pass filter for the reverb
 - Reverb HiCut - reverb treble loss control
+- Delay (button) on/off
+- Tap (button) delay tap tempo
+- Time - delay time
+- Inertia - Time setting update rate (creates slow down/speed up effects)
+- Repeats - delay feedback control
+- Mix - dry/wet mixer
+- Mod Rate - delay modulation speed
+- Mod Depth - delay modulation depth
+- HiCut - delay treble loss
+- LowCut - delay bass loss
+- Treble - delay tone control
+- Bass - delay tone control
 - Doubler - Cabsim stereo doubler on/off
 - Cabinet IR - G1-7 guitar cabinets, B1-3 Bass cabinets, OFF - bypass
 - Dry, Wet - analog Dry and Wet signal switches (T41.GFX pedal)
