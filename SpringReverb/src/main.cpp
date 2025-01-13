@@ -16,13 +16,13 @@
 #include <Arduino.h>
 #include "Audio.h"
 #include "OpenAudio_ArduinoLibrary.h"
-#include "hexefx_audio_F32.h"
+#include "hexefx_audiolib_F32.h"
 #include "basic_components.h" // for constant power xfade
 #include "BasicTerm.h"
 #include "stats.h"
 
-// uncomment the line below to make examlpe work with TeensyAudioAdapter board (SGTL5000)
-//#define USE_TEENSY_AUDIO_BOARD
+// uncomment the line below to make the examlpe work with TeensyAudioAdapter board (SGTL5000)
+#define USE_TEENSY_AUDIO_BOARD
 
 #ifndef DBG_SERIAL 
 	#define DBG_SERIAL Serial

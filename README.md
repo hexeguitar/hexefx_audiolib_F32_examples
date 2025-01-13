@@ -9,6 +9,9 @@ Example projects for the [hexefx_audiolib_F32](https://github.com/hexeguitar/hex
 ### [Stereo Spring Reverb](https://github.com/hexeguitar/hexefx_audiolib_F32_examples/tree/main/SpringReverb "Stereo Spring Reverb") 
 [![HexeFX Stereo Spring Reverb](http://img.youtube.com/vi/y40e_oZgkyY/0.jpg)](https://www.youtube.com/watch?v=y40e_oZgkyY)  
 
+### [Stereo Ping-Pong Delay](https://github.com/hexeguitar/hexefx_audiolib_F32_examples/tree/main/StereoDelay "Stereo delay") 
+[![HexeFX Stereo Ping-Pong Delay](http://img.youtube.com/vi/8yd99svbHjc/0.jpg)](https://www.youtube.com/watch?v=8yd99svbHjc)  
+
 
 ### [Stereo IR Cabsim](https://github.com/hexeguitar/hexefx_audiolib_F32_examples/tree/main/StereoIRcabsim "Stereo IR Cabsim")  
 [![HexeFX Stereo IR Cabsim](http://img.youtube.com/vi/VG3BTwthkws/0.jpg)](http://www.youtube.com/watch?v=VG3BTwthkws)  

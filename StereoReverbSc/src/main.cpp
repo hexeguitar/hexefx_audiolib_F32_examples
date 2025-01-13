@@ -16,12 +16,12 @@
 #include <Arduino.h>
 #include "Audio.h"
 #include "OpenAudio_ArduinoLibrary.h"
-#include "hexefx_audio_F32.h"
+#include "hexefx_audiolib_F32.h"
 #include "BasicTerm.h"
 #include "stats.h"
 
-// uncomment the line below to make examlpe work with TeensyAudioAdapter board (SGTL5000)
-//#define USE_TEENSY_AUDIO_BOARD
+// uncomment the line below to make the example work with TeensyAudioAdapter board (SGTL5000)
+#define USE_TEENSY_AUDIO_BOARD
 
 #ifndef DBG_SERIAL 
 	#define DBG_SERIAL Serial
@@ -68,7 +68,7 @@ void printMemInfo(void);
 void setup()
 {
 	DBG_SERIAL.begin(115200);
-	DBG_SERIAL.println("T41GFX - Stereo Plate Reverb");
+	DBG_SERIAL.println("T41GFX - Stereo Reverb SC");
 	DBG_SERIAL.println("01.2024 www.hexefx.com");
 	// analog IO setup - depends on used hardware
 	pinMode(DRY_CTRL_PIN, OUTPUT);

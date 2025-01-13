@@ -16,7 +16,7 @@
 #include <Arduino.h>
 #include <Audio.h>
 #include <OpenAudio_ArduinoLibrary.h>
-#include <hexefx_audio_F32.h>
+#include <hexefx_audiolib_F32.h>
 #include <BasicTerm.h>
 
 #define DBG_SERIAL Serial
