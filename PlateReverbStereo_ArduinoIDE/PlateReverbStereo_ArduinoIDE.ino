@@ -120,7 +120,7 @@ void cb_ControlChange(byte channel, byte control, byte value)
 			reverb.diffusion(tmp);
             break;
         case 82:
-			reverb.mix(tmp, 1.0f-tmp);
+			reverb.mix(tmp);
             break;
         case 83:
 			reverb.lodamp(tmp);  

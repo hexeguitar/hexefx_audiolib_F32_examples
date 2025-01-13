@@ -41,8 +41,9 @@ BasicTerm term(&DBG_SERIAL); // terminal is used to print out the status and inf
 void cb_NoteOn(byte channel, byte note, byte velocity);
 void cb_ControlChange(byte channel, byte control, byte value);
 
-bool doublerState = true;
+bool doublerState = false;
 uint8_t IRno = 6;
+uint8_t eqModelNo = 0;
 const char *eqPresetName;
 uint32_t timeNow, timeLast;
 const char msg_OFF[] = "OFF";
@@ -68,6 +69,7 @@ void setup()
     usbMIDI.setHandleControlChange(cb_ControlChange);
 	// default sound settings:
 	cabsim.ir_load(IRno);
+    eqModelNo = TONESTACK_MESA;
 	eq.setModel(TONESTACK_MESA);
 	eq.setTone(0.2f, 0.7f, 0.75f);
 	eq.setGain(0.8f * 4.0f);
@@ -113,7 +115,8 @@ void cb_NoteOn(byte channel, byte note, byte velocity)
             SCB_AIRCR = 0x05FA0004; // MCU reset
             break;
 		case 18 ... 27:
-			eq.setModel((toneStack_presets_e)(note-18));
+			eqModelNo = note - 18;
+			eq.setModel((toneStack_presets_e)(eqModelNo));
 			eqPresetName = eq.getName();
 			break;
 		case 28:
